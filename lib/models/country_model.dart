@@ -1,18 +1,32 @@
 class CountryModel {
+  final Map <String, dynamic> currencies;
+  final Map <String, dynamic> languages;
   final String countryName;
   final String region;
+  final int area;
   final String flagUrl;
-  final double population;
+  final int population;
   final String capitalCity;
-  final String officailLanguage;
-  final String currencies;
 
- CountryModel(
-      {required this.capitalCity,
-      required this.countryName,
-      required this.currencies,
-      required this.flagUrl,
-      required this.officailLanguage,
-      required this.population,
-      required this.region});
+  CountryModel({
+    required this.currencies,
+    required this.languages,
+    required this.capitalCity,
+    required this.countryName,
+    required this.area,
+    required this.flagUrl,
+    required this.population,
+    required this.region,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'countryName': countryName,
+      'region': region,
+      'area': area,
+      'flagUrl': flagUrl,
+      'population': population,
+      'capitalCity': capitalCity,
+    };
+  }
 }

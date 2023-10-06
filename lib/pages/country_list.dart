@@ -1,7 +1,11 @@
+import 'package:country_game/controller/learning_queue.dart';
+import 'package:country_game/controller/provider.dart';
 import 'package:country_game/pages/country_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 class CountryList extends StatefulWidget {
   const CountryList({super.key});
@@ -56,15 +60,8 @@ class _CountryListState extends State<CountryList> {
 
   @override
   Widget build(BuildContext context) {
+    final providerController = Provider.of<ProviderCountroller>(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Center(
-            child: Text(
-          'Country List',
-          style: TextStyle(fontSize: 22),
-        )),
-      ),
       body: Column(
         children: [
           Padding(
@@ -136,20 +133,57 @@ class _CountryListState extends State<CountryList> {
                             width: 5,
                           ),
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  country['name'] ?? 'Unknown',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 20),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        country['name'] ?? 'Unknown',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                      Text(
+                                        country['region'] ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black45),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  country['region'] ?? '',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Colors.black45),
+                                const SizedBox(
+                                  width: 10,
                                 ),
+                                Container(
+                                    margin: const EdgeInsets.only(right: 10),
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          providerController
+                                              .check(country['name']);
+
+                                          LearningQueueController().writeData(
+                                              languages: officailLanguage,
+                                              currencies: currencies,
+                                              capitalCity: capitalCity,
+                                              area: area,
+                                              countryName:
+                                                  country['name'] ?? 'Unknown',
+                                              flagUrl: flagUrlLagrgeSized,
+                                              population: population,
+                                              region: region);
+                                        },
+                                        child: Icon(
+                                          Icons.queue,
+                                          color: providerController
+                                                  .check(country['name'])
+                                              ? Colors.red
+                                              : Colors.black,
+                                        )))
                               ],
                             ),
                           )
